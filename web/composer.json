@@ -1,0 +1,22 @@
+{
+    "name": "match7/web",
+    "authors": [
+        {
+            "name": "Slawa",
+            "email": "spidgorny@gmail.com"
+        }
+    ],
+    "require": {
+        "predis/predis": "^1.1",
+        "vlucas/phpdotenv": "^5.1",
+        "symfony/process": "^5.1"
+    },
+    "scripts": {
+        "serve": "php -S 0.0.0.0:80"
+    },
+    "autoload": {
+       "classmap": [
+            "src"
+        ]
+    }
+}

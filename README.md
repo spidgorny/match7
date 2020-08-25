@@ -21,15 +21,15 @@ Result:
 Prepare cut-out images for each digit.
 
 ![](0.png)
-![](1.png)
-![](2.png)
+![](digits/1.png)
+![](digits/2.png)
 ![](3.png)
-![](4.png)
-![](5.png)
-![](6.png)
-![](7.png)
-![](8.png)
-![](9.png)
+![](digits/4.png)
+![](digits/5.png)
+![](digits/6.png)
+![](digits/7.png)
+![](digits/8.png)
+![](digits/9.png)
 
 ## Step 3
 
