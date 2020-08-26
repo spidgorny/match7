@@ -12,7 +12,7 @@ var myChart = new Chart(ctx, {
 				borderWidth: 1
 			},
 			{
-				label: 'Yesterday',
+				label: 'Last day/month',
 				data: yesterday,
 				fill: false,
 				borderDash: [5, 5],

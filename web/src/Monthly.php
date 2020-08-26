@@ -52,9 +52,12 @@ class Monthly extends Controller
 	public function getMonth($month)
 	{
 		$monthData = [];
-		foreach (range(1, date('t', strtotime($this->date))) as $day) {
-			$date = $this->month . '-' . $day;
+		foreach (range(1, date('t', strtotime($month . '-01'))) as $day) {
+			$date = $month . '-' . $day;
 			$json = $this->redis->get($date);
+			if ($json) {
+				llog($month, $date, strlen($json));
+			}
 			$data = json_decode($json, false);
 			$monthData[$day] = $data ? end($data) - first($data) : 0;
 		}
