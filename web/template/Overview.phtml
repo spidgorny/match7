@@ -3,10 +3,8 @@
 		<?= $this->date ?>
     </h5>
     <nav class="my-2 my-md-0 mr-md-3">
-        <a class="p-2 text-dark" href="#">Features</a>
-        <a class="p-2 text-dark" href="#">Enterprise</a>
-        <a class="p-2 text-dark" href="#">Support</a>
-        <a class="p-2 text-dark" href="#">Pricing</a>
+        <a class="p-2 text-dark" href="Overview">Daily</a>
+        <a class="p-2 text-dark" href="Monthly">Monthly</a>
     </nav>
     <a class="btn btn-outline-primary" href="#">Sign up</a>
 </div>
@@ -31,14 +29,14 @@
             <div class="rounded bg-warning px-2 py-1">
                 <h3 class="text-right"><?= $totalYesterday ?> <small>kWh</small></h3>
                 <h5 class="text-right"><?= $totalYesterdayEUR ?> &euro;</h5>
-                <small class="">Total yesterday</small>
+                <small class="">Total <?= $time_1 ?></small>
             </div>
         </div>
         <div class="col-sm-3">
             <div class="rounded bg-info px-2 py-1">
                 <h3 class="text-right"><?= $total ?> <small>kWh</small></h3>
                 <h5 class="text-right"><?= $totalEUR ?> &euro;</h5>
-                <small class="">Total today</small>
+                <small class="">Total <?= $time ?></small>
             </div>
         </div>
     </div>

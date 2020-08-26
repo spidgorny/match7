@@ -52,6 +52,8 @@ class Overview extends Controller
 			'total' => number_format($totalToday, 2),
 			'totalEUR' => number_format($totalToday * 0.3, 2),
 			'jsonYesterday' => json_encode($diffYesterday),
+			'time' => 'today',
+			'time_1' => 'yesterday',
 		]);
 	}
 
