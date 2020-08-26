@@ -1,0 +1,51 @@
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+    <h5 class="my-0 mr-md-auto font-weight-normal">
+		<?= $this->date ?>
+    </h5>
+    <nav class="my-2 my-md-0 mr-md-3">
+        <a class="p-2 text-dark" href="#">Features</a>
+        <a class="p-2 text-dark" href="#">Enterprise</a>
+        <a class="p-2 text-dark" href="#">Support</a>
+        <a class="p-2 text-dark" href="#">Pricing</a>
+    </nav>
+    <a class="btn btn-outline-primary" href="#">Sign up</a>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="rounded bg-primary px-2 py-1">
+                <h3 class="text-right"><?= $meter ?> <small>kWh</small></h3>
+                <h5 class="text-right">&nbsp;</h5>
+                <small class="">Meter value</small>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="rounded bg-secondary px-2 py-1">
+                <h3 class="text-right"><?= $current ?> <small>kW</small></h3>
+                <h5 class="text-right"><?= $currentEUR ?> &euro;</h5>
+                <small class="">Current consumption</small>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="rounded bg-warning px-2 py-1">
+                <h3 class="text-right"><?= $totalYesterday ?> <small>kWh</small></h3>
+                <h5 class="text-right"><?= $totalYesterdayEUR ?> &euro;</h5>
+                <small class="">Total yesterday</small>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="rounded bg-info px-2 py-1">
+                <h3 class="text-right"><?= $total ?> <small>kWh</small></h3>
+                <h5 class="text-right"><?= $totalEUR ?> &euro;</h5>
+                <small class="">Total today</small>
+            </div>
+        </div>
+    </div>
+    <canvas id="myChart" width="400" height="300"></canvas>
+    <script>var data = <?= $jsonData ?>;</script>
+    <script>var yesterday = <?= $jsonYesterday ?>;</script>
+    <script>var labels = <?= $jsonLabels ?>;</script>
+	<?= $content ?>
+	<?= $dataTable ?>
+</div>

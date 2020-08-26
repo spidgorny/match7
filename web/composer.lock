@@ -1,20 +1,20 @@
 {
-    "_readme": [
-        "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
-        "This file is @generated automatically"
-    ],
-    "content-hash": "b7e2479ce0d787e9028915d7a8b4a1dd",
-    "packages": [
-        {
-            "name": "graham-campbell/result-type",
-            "version": "v1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/GrahamCampbell/Result-Type.git",
-                "reference": "7e279d2cd5d7fbb156ce46daada972355cea27bb"
-            },
-            "dist": {
+	"_readme": [
+		"This file locks the dependencies of your project to a known state",
+		"Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+		"This file is @generated automatically"
+	],
+	"content-hash": "95164ef300ce34511ae8d7de8dea935d",
+	"packages": [
+		{
+			"name": "graham-campbell/result-type",
+			"version": "v1.0.1",
+			"source": {
+				"type": "git",
+				"url": "https://github.com/GrahamCampbell/Result-Type.git",
+				"reference": "7e279d2cd5d7fbb156ce46daada972355cea27bb"
+			},
+			"dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/GrahamCampbell/Result-Type/zipball/7e279d2cd5d7fbb156ce46daada972355cea27bb",
                 "reference": "7e279d2cd5d7fbb156ce46daada972355cea27bb",
@@ -173,26 +173,97 @@
                     "role": "Maintainer"
                 }
             ],
-            "description": "Flexible and feature-complete Redis client for PHP and HHVM",
-            "homepage": "http://github.com/predis/predis",
-            "keywords": [
-                "nosql",
-                "predis",
-                "redis"
-            ],
-            "time": "2020-08-18T21:00:59+00:00"
-        },
-        {
-            "name": "symfony/polyfill-ctype",
-            "version": "v1.18.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "1c302646f6efc070cd46856e600e5e0684d6b454"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/1c302646f6efc070cd46856e600e5e0684d6b454",
+			"description": "Flexible and feature-complete Redis client for PHP and HHVM",
+			"homepage": "http://github.com/predis/predis",
+			"keywords": [
+				"nosql",
+				"predis",
+				"redis"
+			],
+			"time": "2020-08-18T21:00:59+00:00"
+		},
+		{
+			"name": "spidgorny/nadlib",
+			"version": "dev-default",
+			"source": {
+				"type": "hg",
+				"url": "https://bitbucket.org/spidgorny/nadlib",
+				"reference": "a794ad20f3eb9df19d677a7c7f7f42b4cb4ec791"
+			},
+			"dist": {
+				"type": "zip",
+				"url": "https://bitbucket.org/spidgorny/nadlib/get/a794ad20f3eb9df19d677a7c7f7f42b4cb4ec791.zip",
+				"reference": "a794ad20f3eb9df19d677a7c7f7f42b4cb4ec791",
+				"shasum": ""
+			},
+			"require": {
+				"php": ">=5 || >=7"
+			},
+			"require-dev": {
+				"phpunit/phpunit": "^6"
+			},
+			"suggest": {
+				"components/bootstrap": "dev-master",
+				"components/modernizr": "dev-master",
+				"danielstjules/stringy": ">=1.5.1",
+				"flot/flot": "dev-master",
+				"gnat/nc-cms": "*",
+				"greenlion/php-sql-parser": "*",
+				"hrmatching/advanced_html_dom": "dev-master",
+				"htmlawed/htmlawed": "dev-master",
+				"leafo/lessphp": "0.4.0",
+				"michelf/php-markdown": "~1.4",
+				"mustangostang/spyc": "dev-master",
+				"phpauth/phpauth": "dev-master",
+				"phpunit/phpunit": "*",
+				"robloach/component-installer": "^0.2.3",
+				"squizlabs/php_codesniffer": "^3.0@dev"
+			},
+			"type": "library",
+			"autoload": {
+				"classmap": [
+					"./",
+					"Base/",
+					"Cache/",
+					"Controller/",
+					"CSS/",
+					"Data/",
+					"DB/",
+					"Debug/",
+					"HTML/",
+					"HTMLForm/",
+					"HTTP/",
+					"LocalLang/",
+					"ORM/",
+					"SQL/",
+					"Queue/",
+					"Runner/",
+					"SQL/",
+					"Time/",
+					"User/"
+				],
+				"files": [
+					"init.php"
+				],
+				"psr-0": {
+					"": "src/"
+				}
+			},
+			"notification-url": "https://packagist.org/downloads/",
+			"homepage": "https://bitbucket.org/spidgorny/nadlib",
+			"time": "2020-01-15T10:05:23+00:00"
+		},
+		{
+			"name": "symfony/polyfill-ctype",
+			"version": "v1.18.1",
+			"source": {
+				"type": "git",
+				"url": "https://github.com/symfony/polyfill-ctype.git",
+				"reference": "1c302646f6efc070cd46856e600e5e0684d6b454"
+			},
+			"dist": {
+				"type": "zip",
+				"url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/1c302646f6efc070cd46856e600e5e0684d6b454",
                 "reference": "1c302646f6efc070cd46856e600e5e0684d6b454",
                 "shasum": ""
             },
@@ -483,19 +554,21 @@
             ],
             "description": "Loads environment variables from `.env` to `getenv()`, `$_ENV` and `$_SERVER` automagically.",
             "keywords": [
-                "dotenv",
-                "env",
-                "environment"
-            ],
-            "time": "2020-07-14T19:26:25+00:00"
-        }
-    ],
-    "packages-dev": [],
-    "aliases": [],
-    "minimum-stability": "stable",
-    "stability-flags": [],
-    "prefer-stable": false,
-    "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": []
+				"dotenv",
+				"env",
+				"environment"
+			],
+			"time": "2020-07-14T19:26:25+00:00"
+		}
+	],
+	"packages-dev": [],
+	"aliases": [],
+	"minimum-stability": "stable",
+	"stability-flags": {
+		"spidgorny/nadlib": 20
+	},
+	"prefer-stable": false,
+	"prefer-lowest": false,
+	"platform": [],
+	"platform-dev": []
 }

@@ -9,13 +9,15 @@
     "require": {
         "predis/predis": "^1.1",
         "vlucas/phpdotenv": "^5.1",
-        "symfony/process": "^5.1"
+        "symfony/process": "^5.1",
+        "spidgorny/nadlib": "@dev",
+        "ext-json": "*"
     },
     "scripts": {
         "serve": "php -S 0.0.0.0:80"
     },
     "autoload": {
-       "classmap": [
+        "classmap": [
             "src"
         ]
     }
