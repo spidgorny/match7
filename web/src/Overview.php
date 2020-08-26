@@ -10,7 +10,8 @@ class Overview extends Controller
 	{
 		parent::__construct();
 		$this->redis = $redis;
-		$this->date = date('Y-m-d');
+		$getDate = $this->request->getDateFromY_M_D('date');
+		$this->date = $getDate ? date('Y-m-d', $getDate) : date('Y-m-d');
 	}
 
 	public function indexAction()
@@ -33,19 +34,23 @@ class Overview extends Controller
 			$yesterdayConsumption = end($yesterdayData) - first($yesterdayData);
 		}
 
+		$totalToday = $data ? end($data) - first($data) : 0;
+
 		$view = View::getInstance(__DIR__ . '/../template/Overview.phtml', $this);
 		return $view->render([
 			'content' => $this->s($content),
 			'dataTable' => getDebug($diff),
 			'jsonData' => json_encode($diff),
-			'jsonLabels' => json_encode(array_keys($data)),
-			'meter' => number_format(end($data), 2, '.', ' '),
+			'jsonLabels' => json_encode(
+				($data ? array_keys($data) : []) +
+				($yesterdayData ? array_keys($yesterdayData) : [])),
+			'meter' => number_format($data ? end($data) : 0, 2, '.', ' '),
 			'current' => number_format(end($diff), 2),
 			'currentEUR' => number_format(end($diff) * 0.3, 2),
 			'totalYesterday' => number_format($yesterdayConsumption, 2),
 			'totalYesterdayEUR' => number_format($yesterdayConsumption * 0.3, 2),
-			'total' => number_format(end($data) - first($data), 2),
-			'totalEUR' => number_format((end($data) - first($data)) * 0.3, 2),
+			'total' => number_format($totalToday, 2),
+			'totalEUR' => number_format($totalToday * 0.3, 2),
 			'jsonYesterday' => json_encode($diffYesterday),
 		]);
 	}
@@ -53,6 +58,9 @@ class Overview extends Controller
 	public function getDiff($data)
 	{
 		$diff = [];
+		if (!$data) {
+			return $diff;
+		}
 		$prev = first($data);
 		foreach ($data as $el) {
 			$diff[] = $el - $prev;

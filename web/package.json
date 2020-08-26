@@ -1,0 +1,9 @@
+{
+	"dependencies": {
+		"swipejs": "^2.2.18"
+	},
+	"name": "web",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT"
+}

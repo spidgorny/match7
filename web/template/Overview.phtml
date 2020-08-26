@@ -42,10 +42,21 @@
             </div>
         </div>
     </div>
-    <canvas id="myChart" width="400" height="300"></canvas>
+    <div id="slider" class="swipe">
+        <div class="swipe-wrap">
+            <div>Loading...</div>
+            <div>
+                <canvas id="myChart" width="400" height="300"></canvas>
+            </div>
+            <div>Loading...</div>
+        </div>
+    </div>
     <script>var data = <?= $jsonData ?>;</script>
     <script>var yesterday = <?= $jsonYesterday ?>;</script>
     <script>var labels = <?= $jsonLabels ?>;</script>
 	<?= $content ?>
 	<?= $dataTable ?>
 </div>
+<link rel="stylesheet" href="css/swipe.css"/>
+<script src="node_modules/swipejs/build/swipe.min.js"></script>
+<script src="js/swipe.js"></script>
