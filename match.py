@@ -4,13 +4,6 @@ import sys
 import os
 # from matplotlib import pyplot as plt
 
-if not sys.argv[1]:
-	raise Error("first arg must be an image file path")
-
-print(sys.argv[1])
-img_rgb = cv2.imread(sys.argv[1])
-img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
-
 def detectNumber(templateFile):
 	# print(templateFile)
 	template = cv2.imread(templateFile, 0)
@@ -69,48 +62,43 @@ def drawBoxes(sevenW, sevenH, boxes):
 	for pt in boxes:
 		cv2.rectangle(img_rgb, pt, (pt[0] + sevenW, pt[1] + sevenH), (0,0,255), 1)
 
+def main():
+	if not sys.argv[1]:
+		raise Error("first arg must be an image file path")
 
-def test_test_overlap():
-	new = [[40, 192]]
-	width = 46
-	height = 74
-	check = [39, 193]
-	overlap = test_overlap(new, check, width, height)
-	print(new[0], new[0][0] + width, new[0][1] + height)
-	print(check, check[0] + width, check[1] + height)
-	print(overlap)
+	print(sys.argv[1])
+	img_rgb = cv2.imread(sys.argv[1])
+	img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
 
-# test_test_overlap()
-# exit()
+	allBoxes = []
+	numbers = [1, 2, 4, 5, 6, 7, 8, 9]
+	for num in numbers:
+		digits = os.path.dirname(os.path.abspath(__file__)) + '/digits/'
+		digitFile = digits + str(num) + '.png'
+		print(digitFile)
+		oneW, oneH, oneBoxes = detectNumber(digitFile)
+		# print(oneW, oneH, len(oneBoxes))
+		oneBoxes = dissociate(oneW, oneH, oneBoxes)
+		# print(oneBoxes)
+		drawBoxes(oneW, oneH, oneBoxes)
+		for bx in oneBoxes:
+			allBoxes.append({
+				"width": oneW,
+				"height": oneH,
+				"x": bx[0],
+				"y": bx[1],
+				"num": num,
+			})
 
-allBoxes = []
-numbers = [1, 2, 4, 5, 6, 7, 8, 9]
-for num in numbers:
-	digits = os.path.dirname(os.path.abspath(__file__)) + '/digits/'
-	digitFile = digits + str(num) + '.png'
-	print(digitFile)
-	oneW, oneH, oneBoxes = detectNumber(digitFile)
-	# print(oneW, oneH, len(oneBoxes))
-	oneBoxes = dissociate(oneW, oneH, oneBoxes)
-	# print(oneBoxes)
-	drawBoxes(oneW, oneH, oneBoxes)
-	for bx in oneBoxes:
-		allBoxes.append({
-			"width": oneW,
-			"height": oneH,
-			"x": bx[0],
-			"y": bx[1],
-			"num": num,
-		})
+	allBoxes.sort(key=lambda el: el["x"])	# from left to right
+	meter = list(str(t["num"]) for t in allBoxes)
+	meter = "".join(meter)
+	iMeter = int(meter)
+	if len(meter) > 5:
+		iMeter /= 10
+	print(meter, iMeter)
 
-allBoxes.sort(key=lambda el: el["x"])	# from left to right
-meter = list(str(t["num"]) for t in allBoxes)
-meter = "".join(meter)
-iMeter = int(meter)
-if len(meter) > 5:
-	iMeter /= 10
-print(meter, iMeter)
+	cv2.imwrite('res2.png',img_rgb)
 
-
-cv2.imwrite('res2.png',img_rgb)
-
+if __name__ == "__main__":
+	main()

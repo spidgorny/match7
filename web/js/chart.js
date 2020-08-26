@@ -1,5 +1,5 @@
-var ctx = document.getElementById('myChart').getContext('2d');
-var myChart = new Chart(ctx, {
+const ctx = document.getElementById('myChart').getContext('2d');
+const myChart = new Chart(ctx, {
 	type: 'line',
 	data: {
 		labels,
@@ -29,6 +29,21 @@ var myChart = new Chart(ctx, {
 					beginAtZero: true,
 				}
 			}]
+		},
+		onClick: (a, b, c) => {
+			// console.log(a, b, c);
+			if (!b.length) {
+				return;
+			}
+			const url = new URL(document.location.href);
+			if (!url.pathname.includes('Monthly')) {
+				return;
+			}
+			url.pathname = '/Overview';
+			const ym = document.querySelector('h5#title').innerHTML.trim();
+			const day = b[0]._index + 1;	// day 0 => 1
+			url.searchParams.set('date', ym + '-' + day.toString().padStart(2, '0'));
+			document.location.href = url.toString();
 		}
 	}
 });

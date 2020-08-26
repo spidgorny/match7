@@ -1,4 +1,6 @@
-<?php
+<?php /** @noinspection AdditionOperationOnArraysInspection */
+
+use Predis\Client;
 
 class Monthly extends Controller
 {
@@ -7,7 +9,7 @@ class Monthly extends Controller
 	public $month;
 	protected $redis;
 
-	public function __construct(\Predis\Client $redis)
+	public function __construct(Client $redis)
 	{
 		parent::__construct();
 		$this->redis = $redis;
@@ -30,6 +32,7 @@ class Monthly extends Controller
 
 		$view = View::getInstance(__DIR__ . '/../template/Overview.phtml', $this);
 		return $view->render([
+			'title' => $this->month,
 			'content' => $this->s($content),
 			'dataTable' => getDebug($data),
 			'jsonData' => json_encode(array_values($data)),

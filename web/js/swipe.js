@@ -8,12 +8,12 @@ window.mySwipe = new Swipe(element, {
 	disableScroll: true,
 	stopPropagation: true,
 	callback: function (index, element) {
-		console.log('swipe', index);
+		// console.log('swipe', index);
 		const url = new URL(document.location);
 		const urlDate = url.searchParams.get('date');
-		console.log(urlDate);
+		// console.log(urlDate);
 		let date = urlDate ? new Date(urlDate) : new Date();
-		console.log(url.pathname);
+		// console.log(url.pathname);
 		if (url.pathname.includes('Monthly')) {
 			date.setMonth(date.getMonth() + index - 1);
 		} else {
@@ -26,6 +26,6 @@ window.mySwipe = new Swipe(element, {
 		document.location.href = url.toString();
 	},
 	transitionEnd: function (index, element) {
-		console.log('transitionend', index);
+		// console.log('transitionend', index);
 	}
 });

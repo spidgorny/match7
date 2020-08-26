@@ -1,4 +1,6 @@
-<?php
+<?php /** @noinspection AdditionOperationOnArraysInspection */
+
+use Predis\Client;
 
 class Overview extends Controller
 {
@@ -6,7 +8,7 @@ class Overview extends Controller
 	public $date;
 	protected $redis;
 
-	public function __construct(\Predis\Client $redis)
+	public function __construct(Client $redis)
 	{
 		parent::__construct();
 		$this->redis = $redis;
@@ -38,6 +40,7 @@ class Overview extends Controller
 
 		$view = View::getInstance(__DIR__ . '/../template/Overview.phtml', $this);
 		return $view->render([
+			'title' => $this->date,
 			'content' => $this->s($content),
 			'dataTable' => getDebug($diff),
 			'jsonData' => json_encode($diff),
