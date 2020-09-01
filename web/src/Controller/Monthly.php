@@ -30,7 +30,7 @@ class Monthly extends Controller
 		$totalThisMonth = array_sum($data);
 		$totalLastMonth = array_sum($lastMonth);
 
-		$view = View::getInstance(__DIR__ . '/../template/Overview.phtml', $this);
+		$view = View::getInstance(__DIR__ . '/../../template/Overview.phtml', $this);
 		return $view->render([
 			'title' => $this->month,
 			'content' => $this->s($content),
@@ -56,12 +56,12 @@ class Monthly extends Controller
 	{
 		$monthData = [];
 		foreach (range(1, date('t', strtotime($month . '-01'))) as $day) {
-			$date = $month . '-' . $day;
+			$date = $month . '-' . str_pad($day, 2, '0', STR_PAD_LEFT);
 			$json = $this->redis->get($date);
 			if ($json) {
-				llog($month, $date, strlen($json));
+//				llog($month, $date, strlen($json));
 			}
-			$data = json_decode($json, false);
+			$data = json_decode($json, true);
 			$monthData[$day] = $data ? end($data) - first($data) : 0;
 		}
 		return $monthData;

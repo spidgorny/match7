@@ -4,12 +4,12 @@ import sys
 import os
 # from matplotlib import pyplot as plt
 
-def detectNumber(templateFile):
+def detectNumber(img_gray, templateFile):
 	# print(templateFile)
 	template = cv2.imread(templateFile, 0)
 	w, h = template.shape[::-1]
 
-	res = cv2.matchTemplate(img_gray,template,cv2.TM_CCOEFF_NORMED)
+	res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
 	threshold = 0.85
 	# print(res)
 	loc = np.where( res >= threshold)
@@ -58,7 +58,7 @@ def boxOverlap(box, el):
 	# or bottom-right corner in the box
 	return not ((xOK or yOK) or (x2K or y2K))
 
-def drawBoxes(sevenW, sevenH, boxes):
+def drawBoxes(img_rgb, sevenW, sevenH, boxes):
 	for pt in boxes:
 		cv2.rectangle(img_rgb, pt, (pt[0] + sevenW, pt[1] + sevenH), (0,0,255), 1)
 
@@ -76,11 +76,11 @@ def main():
 		digits = os.path.dirname(os.path.abspath(__file__)) + '/digits/'
 		digitFile = digits + str(num) + '.png'
 		print(digitFile)
-		oneW, oneH, oneBoxes = detectNumber(digitFile)
+		oneW, oneH, oneBoxes = detectNumber(img_gray, digitFile)
 		# print(oneW, oneH, len(oneBoxes))
 		oneBoxes = dissociate(oneW, oneH, oneBoxes)
 		# print(oneBoxes)
-		drawBoxes(oneW, oneH, oneBoxes)
+		drawBoxes(img_rgb, oneW, oneH, oneBoxes)
 		for bx in oneBoxes:
 			allBoxes.append({
 				"width": oneW,

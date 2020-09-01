@@ -19,12 +19,10 @@ class Overview extends Controller
 	public function indexAction()
 	{
 		$content[] = $this->html->h1($this->date, ['class' => 'title']);
-		$yesterday = date('Y-m-d', strtotime('-1 day', strtotime($this->date)));
-		$yesterdayJson = $this->redis->get($yesterday);
-		$yesterdayData = json_decode($yesterdayJson, false);
+		$yesterdayData = $this->getYesterday();
 		$json = $this->redis->get($this->date);
 //		$content[] = $this->html->div($json);
-		$data = json_decode($json, false);
+		$data = json_decode($json, true);
 		$diffYesterday = $this->getDiff($yesterdayData);
 		$diff = $this->getDiff($data);
 		$this->index->addJS('https://cdn.jsdelivr.net/npm/chart.js@2.8.0');
@@ -38,7 +36,7 @@ class Overview extends Controller
 
 		$totalToday = $data ? end($data) - first($data) : 0;
 
-		$view = View::getInstance(__DIR__ . '/../template/Overview.phtml', $this);
+		$view = View::getInstance(__DIR__ . '/../../template/Overview.phtml', $this);
 		return $view->render([
 			'title' => $this->date,
 			'content' => $this->s($content),
@@ -47,7 +45,7 @@ class Overview extends Controller
 			'jsonLabels' => json_encode(
 				($data ? array_keys($data) : []) +
 				($yesterdayData ? array_keys($yesterdayData) : [])),
-			'meter' => number_format($data ? end($data) : 0, 2, '.', ' '),
+			'meter' => number_format($data ? end($data) : 0, 1, '.', ' '),
 			'current' => number_format(end($diff), 2),
 			'currentEUR' => number_format(end($diff) * 0.3, 2),
 			'totalYesterday' => number_format($yesterdayConsumption, 2),
@@ -76,13 +74,27 @@ class Overview extends Controller
 
 	public function saveTestAction()
 	{
+		$base = 71458;
+		$yesterday = $this->getYesterday();
+		if ($yesterday) {
+			$base = end($yesterday);
+		}
 		$dictionary = [];
 		foreach (range(0, 24) as $a) {
-			$dictionary[] = 71458 + $a + mt_rand(-4, 4);
+			$value = $base + ($a + mt_rand(-4, 4)) / 24;
+			$dictionary[$a . ':00:00'] = $value;
+			$base = $value;
 		}
 		$this->redis->set($this->date, json_encode($dictionary));
-		$content[] = 'ok';
-		return $content;
+		return $this->request->goBack();
+	}
+
+	public function getYesterday()
+	{
+		$yesterday = date('Y-m-d', strtotime('-1 day', strtotime($this->date)));
+		$yesterdayJson = $this->redis->get($yesterday);
+		$yesterdayData = json_decode($yesterdayJson, true);
+		return $yesterdayData;
 	}
 
 }
