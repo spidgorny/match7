@@ -12,7 +12,14 @@ class FileWalker
 
 	public function __invoke()
 	{
-		$files = [__DIR__ . '/../../../source.jpg'];
+//		$files = [__DIR__ . '/../../../source.jpg'];
+//		$files = scandir('/var/motion/');
+		$files = glob(__DIR__ . '/../../../*.jpg');
+		$files = array_map(static function ($file) {
+			return realpath($file);
+		}, $files);
+		llog($files);
+		exit;
 		foreach ($files as $file) {
 			$this->processFile($file);
 		}
