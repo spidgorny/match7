@@ -1,0 +1,6 @@
+#Options +SymLinksIfOwnerMatch
+RewriteEngine On
+RewriteBase /web/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /web/index.php [L]

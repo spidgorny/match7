@@ -9,6 +9,7 @@ session_set_cookie_params([
 	'samesite' => 'Lax',
 ]);
 
+$_COOKIE['debug'] = 1;
 $init = new InitNADLIB();
 $init->init();
 
