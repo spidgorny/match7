@@ -4,6 +4,7 @@ class FileWalker
 {
 
 	protected $redis;
+	protected $storage = '/var/motion/';
 
 	public function __construct(\Predis\Client $redis)
 	{
@@ -13,7 +14,7 @@ class FileWalker
 	public function __invoke()
 	{
 //		$files = [__DIR__ . '/../../../source.jpg'];
-		$files = glob('/var/motion/*.jpg');
+		$files = glob($this->storage . '*.jpg');
 //		$files = glob(__DIR__ . '/../../../*.jpg');
 		$files = array_map(static function ($file) {
 			return realpath($file);
@@ -21,9 +22,16 @@ class FileWalker
 		llog('jpeg files', count($files));
 		[$lastRedisTimestamp, $_] = $this->getLastRedisEntry();
 
-		$firstValid = '25-20200823235154-01.jpg';
+		$firstValidTime = null;
+		$firstValid = trim(@file_get_contents('FileWalkerState.txt'));
+		if ($firstValid) {
+			$firstValidTime = filemtime($this->storage . $firstValid);
+		}
 
-		$files = array_filter($files, static function ($file) use ($lastRedisTimestamp) {
+		$files = array_filter($files, static function ($file) use ($firstValidTime, $lastRedisTimestamp) {
+			if ($firstValidTime && filemtime($file) < $firstValidTime) {
+				return false;
+			}
 			return filemtime($file) >= $lastRedisTimestamp;
 		});
 		llog('filtered files', count($files));
@@ -35,6 +43,7 @@ class FileWalker
 		llog('sorted files', count($files));
 		foreach ($files as $file) {
 			$this->processFile($file);
+			file_put_contents('FileWalkerState.txt', basename($file));
 		}
 	}
 
@@ -61,7 +70,7 @@ class FileWalker
 	public function getTimestamp($file)
 	{
 		$timestamp = filemtime($file);
-		$utc = new DateTimeZone(DateTimeZone::UTC);
+		$utc = new DateTimeZone('UTC');
 		return new DateTime('@' . $timestamp, $utc);
 	}
 
