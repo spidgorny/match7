@@ -20,7 +20,7 @@ function __($a)
 
 function llog(...$vars)
 {
-	$json = json_encode($vars);
+	$json = json_encode($vars, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_LINE_TERMINATORS | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
 	error_log($json);
 }
 

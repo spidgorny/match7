@@ -3,22 +3,27 @@
     "authors": [
         {
             "name": "Slawa",
-            "email": "spidgorny@gmail.com"
-        }
-    ],
-    "require": {
-        "predis/predis": "^1.1",
-        "vlucas/phpdotenv": "^5.1",
-        "symfony/process": "^5.1",
-        "spidgorny/nadlib": "@dev",
-        "ext-json": "*"
-    },
-    "scripts": {
-        "serve": "php -S 0.0.0.0:80"
-    },
-    "autoload": {
-        "classmap": [
-            "src"
-        ]
-    }
+			"email": "spidgorny@gmail.com"
+		}
+	],
+	"require": {
+		"php": "7.3",
+		"predis/predis": "^1.1",
+		"vlucas/phpdotenv": "^5.1",
+		"symfony/process": "^5.1",
+		"spidgorny/nadlib": "@dev",
+		"ext-json": "*"
+	},
+	"require-dev": {
+		"roave/security-advisories": "dev-master"
+	},
+	"scripts": {
+		"serve": "php -S 0.0.0.0:80",
+		"cron": "php cron.php"
+	},
+	"autoload": {
+		"classmap": [
+			"src"
+		]
+	}
 }

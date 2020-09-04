@@ -13,13 +13,23 @@ class FileWalker
 	public function __invoke()
 	{
 //		$files = [__DIR__ . '/../../../source.jpg'];
-//		$files = scandir('/var/motion/');
-		$files = glob(__DIR__ . '/../../../*.jpg');
+		$files = glob('/var/motion/*.jpg');
+//		$files = glob(__DIR__ . '/../../../*.jpg');
 		$files = array_map(static function ($file) {
 			return realpath($file);
 		}, $files);
-		llog($files);
-		exit;
+		llog('jpeg files', count($files));
+		[$lastRedisTimestamp, $_] = $this->getLastRedisEntry();
+		$files = array_filter($files, static function ($file) use ($lastRedisTimestamp) {
+			return filemtime($file) >= $lastRedisTimestamp;
+		});
+		llog('filtered files', count($files));
+		usort($files, static function ($file1, $file2) {
+			$time1 = filemtime($file1);
+			$time2 = filemtime($file2);
+			return $time1 <=> $time2;
+		});
+		llog('sorted files', count($files));
 		foreach ($files as $file) {
 			$this->processFile($file);
 		}
@@ -31,7 +41,7 @@ class FileWalker
 		$newFile = $this->denoise($file);
 		$meter = $this->recognize($newFile);
 		echo $timestamp->format('Y-m-d H:i:s'), ': ', $meter, PHP_EOL;
-		$lastRedisEntry = $this->getLastRedisEntry();
+		[$_, $lastRedisEntry] = $this->getLastRedisEntry();
 		if ($meter >= $lastRedisEntry) {
 			$this->updateDay($timestamp, $meter);
 			echo 'Updated', PHP_EOL;
@@ -66,7 +76,7 @@ class FileWalker
 	public function recognize($file)
 	{
 		$cmd = [
-			'python',
+			'python3',
 			__DIR__ . '/../../../match.py',
 			$file,
 		];
@@ -86,15 +96,23 @@ class FileWalker
 		return $meter;
 	}
 
+	/**
+	 * @return array|null
+	 * @throws JsonException
+	 */
 	public function getLastRedisEntry()
 	{
 		$today = new DateTime();
 		foreach (range(0, 100) as $i) {
 			$date = $today->sub(new DateInterval('P' . $i . 'D'));
 			$data = $this->redis->get($date->format('Y-m-d'));
-			$data = json_decode($data, false);
+			if (!$data) {
+				continue;
+			}
+			$data = json_decode($data, false, 512, JSON_THROW_ON_ERROR);
 			if ($data) {
-				return end($data);
+				$keys = array_keys($data);
+				return [end($keys), end($data)];
 			}
 		}
 		return null;
