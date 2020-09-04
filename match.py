@@ -107,7 +107,32 @@ def main():
 	allBoxes.sort(key=lambda el: el["x"])	# from left to right
 	print(list(str(p["num"]) + ':' + str(p["x"]) + '(' + str(p['confidence']) + ')' for p in allBoxes))
 
-	meter = list(str(t["num"]) for t in allBoxes)
+	bestConfidence = []
+	prev = None
+	for b in allBoxes:
+		if prev is None:
+			print(b['num'], 'prev is None')
+			bestConfidence.append(b)
+			prev = b
+			continue
+		x2 = prev['x'] + prev['width']
+		if prev['x'] <= b['x'] <= x2:
+			# conflict, check confidence
+			print(b['num'], prev['x'], '<=', b['x'], '<=', x2)
+			if b['confidence'] > prev['confidence']:
+				bestConfidence.pop()
+				bestConfidence.append(b)
+			else:
+				pass
+				#bestConfidence.pop()
+				#bestConfidence.append(prev)
+		else:
+			bestConfidence.append(b)
+		prev = b
+
+	print(list(str(p["num"]) + ':' + str(p["x"]) + '(' + str(p['confidence']) + ')' for p in bestConfidence))
+
+	meter = list(str(t["num"]) for t in bestConfidence)
 	meter = "".join(meter)
 	try:
 		iMeter = int(meter)
