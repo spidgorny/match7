@@ -10,10 +10,16 @@ def detectNumber(img_gray, templateFile):
 	w, h = template.shape[::-1]
 
 	res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
-	threshold = 0.85
+#	print(np.shape(res), len(res))
+
+	threshold = 0.80
 	# print(res)
-	loc = np.where( res >= threshold)
-	return w, h, loc
+	loc = np.where(res >= threshold)
+
+#	print(np.shape(loc), len(loc))
+#	print(loc)
+#	exit()
+	return w, h, loc, res
 
 def dissociate(oneW, oneH, oneBoxes):
 	new = []
@@ -58,6 +64,31 @@ def boxOverlap(box, el):
 	# or bottom-right corner in the box
 	return not ((xOK or yOK) or (x2K or y2K))
 
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+def mergeBoxes(img_rgb, img_gray):
+	allBoxes = []
+	for num in numbers:
+		digits = os.path.dirname(os.path.abspath(__file__)) + '/digits/'
+		digitFile = digits + str(num) + '.png'
+		print(digitFile)
+		oneW, oneH, oneBoxes, res = detectNumber(img_gray, digitFile)
+		print(digitFile, len(oneBoxes))
+		# print(oneW, oneH, len(oneBoxes))
+		oneBoxes = dissociate(oneW, oneH, oneBoxes)
+		# print(oneBoxes)
+		drawBoxes(img_rgb, oneW, oneH, oneBoxes)
+		for bx in oneBoxes:
+			print("confidence", res[bx[1], bx[0]])
+			allBoxes.append({
+				"width": oneW,
+				"height": oneH,
+				"x": bx[0],
+				"y": bx[1],
+				"num": num,
+				"confidence": res[bx[1], bx[0]]
+			})
+	return allBoxes
+
 def drawBoxes(img_rgb, sevenW, sevenH, boxes):
 	for pt in boxes:
 		cv2.rectangle(img_rgb, pt, (pt[0] + sevenW, pt[1] + sevenH), (0,0,255), 1)
@@ -70,35 +101,24 @@ def main():
 	img_rgb = cv2.imread(sys.argv[1])
 	img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
 
-	allBoxes = []
-	numbers = [1, 2, 4, 5, 6, 7, 8, 9]
-	for num in numbers:
-		digits = os.path.dirname(os.path.abspath(__file__)) + '/digits/'
-		digitFile = digits + str(num) + '.png'
-		print(digitFile)
-		oneW, oneH, oneBoxes = detectNumber(img_gray, digitFile)
-		# print(oneW, oneH, len(oneBoxes))
-		oneBoxes = dissociate(oneW, oneH, oneBoxes)
-		# print(oneBoxes)
-		drawBoxes(img_rgb, oneW, oneH, oneBoxes)
-		for bx in oneBoxes:
-			allBoxes.append({
-				"width": oneW,
-				"height": oneH,
-				"x": bx[0],
-				"y": bx[1],
-				"num": num,
-			})
+	allBoxes = mergeBoxes(img_rgb, img_gray)
+	print(list(str(p["num"]) + ':' + str(p["x"]) for p in allBoxes))
 
 	allBoxes.sort(key=lambda el: el["x"])	# from left to right
+	print(list(str(p["num"]) + ':' + str(p["x"]) + '(' + str(p['confidence']) + ')' for p in allBoxes))
+
 	meter = list(str(t["num"]) for t in allBoxes)
 	meter = "".join(meter)
-	iMeter = int(meter)
-	if len(meter) > 5:
-		iMeter /= 10
-	print(meter, iMeter)
+	try:
+		iMeter = int(meter)
+		if len(meter) > 5:
+			iMeter /= 10
+		print(meter, iMeter)
 
-	cv2.imwrite('res2.png',img_rgb)
+		cv2.imwrite('res2.png', img_rgb)
+	except ValueError:
+		print('0 0')
+		exit(10)
 
 if __name__ == "__main__":
 	main()

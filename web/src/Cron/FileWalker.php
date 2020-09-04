@@ -20,6 +20,9 @@ class FileWalker
 		}, $files);
 		llog('jpeg files', count($files));
 		[$lastRedisTimestamp, $_] = $this->getLastRedisEntry();
+
+		$firstValid = '25-20200823235154-01.jpg';
+
 		$files = array_filter($files, static function ($file) use ($lastRedisTimestamp) {
 			return filemtime($file) >= $lastRedisTimestamp;
 		});
@@ -42,7 +45,7 @@ class FileWalker
 		$meter = $this->recognize($newFile);
 		echo $timestamp->format('Y-m-d H:i:s'), ': ', $meter, PHP_EOL;
 		[$_, $lastRedisEntry] = $this->getLastRedisEntry();
-		if ($meter >= $lastRedisEntry) {
+		if ($meter && $meter >= $lastRedisEntry) {
 			$this->updateDay($timestamp, $meter);
 			echo 'Updated', PHP_EOL;
 		} else {
@@ -57,7 +60,7 @@ class FileWalker
 	 */
 	public function getTimestamp($file)
 	{
-		$timestamp = filectime($file);
+		$timestamp = filemtime($file);
 		return new DateTime('@' . $timestamp);
 	}
 
@@ -85,11 +88,14 @@ class FileWalker
 		$p->enableOutput();
 		$p->run();
 		$error = $p->getErrorOutput();
-		$meter = $p->getOutput();
+		$output = $p->getOutput();
 		if ($error) {
-			throw new Exception($meter . PHP_EOL . $error);
+			throw new Exception($output . PHP_EOL . $error);
 		}
-		$lines = explode(PHP_EOL, $meter);
+		echo '-------', PHP_EOL;
+		echo $output, PHP_EOL;
+		echo '-------', PHP_EOL;
+		$lines = explode(PHP_EOL, $output);
 		$lines = array_filter($lines);
 		$words = explode(' ', end($lines));
 		$meter = end($words);
@@ -111,7 +117,7 @@ class FileWalker
 			}
 			$data = json_decode($data, false, 512, JSON_THROW_ON_ERROR);
 			if ($data) {
-				$keys = array_keys($data);
+				$keys = array_keys((array)$data);
 				return [end($keys), end($data)];
 			}
 		}

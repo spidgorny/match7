@@ -21,12 +21,12 @@ Result:
 Prepare cut-out images for each digit.
 
 ![](0.png)
-![](digits/1.png)
+![](digits/1a.png)
 ![](digits/2.png)
 ![](3.png)
 ![](digits/4.png)
 ![](digits/5.png)
-![](digits/6.png)
+![](digits/6a.png)
 ![](digits/7.png)
 ![](digits/8.png)
 ![](digits/9.png)
