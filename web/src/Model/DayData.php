@@ -23,7 +23,8 @@ class DayData implements ArrayAccess
 
 	public function save()
 	{
-		$json = json_encode($this->data);
+		$dataWithout0 = array_filter($this->data);
+		$json = json_encode($dataWithout0, JSON_THROW_ON_ERROR);
 		echo $json, PHP_EOL;
 		$this->redis->set($this->day, $json);
 	}

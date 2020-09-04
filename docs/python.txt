@@ -1,0 +1,38 @@
+/var/motion/01-20200831202000-snapshot.png
+/home/pi/match7/digits/1.png
+/home/pi/match7/digits/1.png 2
+confidence 0.7570376
+/home/pi/match7/digits/2.png
+/home/pi/match7/digits/2.png 2
+confidence 0.7518838
+/home/pi/match7/digits/3.png
+/home/pi/match7/digits/3.png 2
+confidence 0.761926
+/home/pi/match7/digits/4.png
+/home/pi/match7/digits/4.png 2
+/home/pi/match7/digits/5.png
+/home/pi/match7/digits/5.png 2
+confidence 0.7500579
+/home/pi/match7/digits/6.png
+/home/pi/match7/digits/6.png 2
+confidence 0.7906498
+/home/pi/match7/digits/7.png
+/home/pi/match7/digits/7.png 2
+confidence 0.7586007
+/home/pi/match7/digits/8.png
+/home/pi/match7/digits/8.png 2
+confidence 0.7520792
+confidence 0.75326335
+/home/pi/match7/digits/9.png
+/home/pi/match7/digits/9.png 2
+confidence 0.8396025
+/home/pi/match7/digits/0.png
+/home/pi/match7/digits/0.png 2
+['1:140', '2:541', '3:346', '5:242', '6:245', '7:41', '8:449', '8:248', '9:447']
+['7:41(0.7586007)', '1:140(0.7570376)', '5:242(0.7500579)', '6:245(0.7906498)', '8:248(0.75326335)', '3:346(0.761926)', '9:447(0.8396025)', '8:449(0.7520792)', '2:541(0.7518838)']
+7 prev is None
+6 242 <= 245 <= 293
+8 245 <= 248 <= 289
+8 447 <= 449 <= 490
+['7:41(0.7586007)', '1:140(0.7570376)', '6:245(0.7906498)', '3:346(0.761926)', '9:447(0.8396025)', '2:541(0.7518838)']
+716392 71639.2

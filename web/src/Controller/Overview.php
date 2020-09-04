@@ -16,6 +16,10 @@ class Overview extends Controller
 		$this->date = $getDate ? date('Y-m-d', $getDate) : date('Y-m-d');
 	}
 
+	/**
+	 * @return MarkdownView|string|string[]|View
+	 * @throws JsonException
+	 */
 	public function indexAction()
 	{
 		$content[] = $this->html->h1($this->date, ['class' => 'title']);
@@ -36,12 +40,26 @@ class Overview extends Controller
 
 		$totalToday = $data ? end($data) - first($data) : 0;
 
+		$dataAndDiff = [];
+		if ($data) {
+			foreach ($data as $key => $val) {
+				$dataAndDiff[] = [
+					'key' => $key,
+					'value' => $val,
+					'diff' => $diff[$key],
+				];
+			}
+		}
+
 		$view = View::getInstance(__DIR__ . '/../../template/Overview.phtml', $this);
 		return $view->render([
 			'title' => $this->date,
 			'content' => $this->s($content),
-			'dataTable' => getDebug($diff),
-			'jsonData' => json_encode($diff),
+			'dataTable' => new slTable($dataAndDiff, [
+				'class' => 'table',
+			]),
+			'jsonData' => json_encode(
+				array_values($diff), JSON_THROW_ON_ERROR),
 			'jsonLabels' => json_encode(
 				($data ? array_keys($data) : []) +
 				($yesterdayData ? array_keys($yesterdayData) : [])),
@@ -52,7 +70,7 @@ class Overview extends Controller
 			'totalYesterdayEUR' => number_format($yesterdayConsumption * 0.3, 2),
 			'total' => number_format($totalToday, 2),
 			'totalEUR' => number_format($totalToday * 0.3, 2),
-			'jsonYesterday' => json_encode($diffYesterday),
+			'jsonYesterday' => json_encode($diffYesterday, JSON_THROW_ON_ERROR),
 			'time' => 'today',
 			'time_1' => 'yesterday',
 		]);
@@ -65,8 +83,8 @@ class Overview extends Controller
 			return $diff;
 		}
 		$prev = first($data);
-		foreach ($data as $el) {
-			$diff[] = $el - $prev;
+		foreach ($data as $key => $el) {
+			$diff[$key] = $el - $prev;
 			$prev = $el;
 		}
 		return $diff;

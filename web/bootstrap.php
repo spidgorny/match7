@@ -20,7 +20,8 @@ function __($a)
 
 function llog(...$vars)
 {
-	$json = json_encode($vars, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_LINE_TERMINATORS | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+	$vars = count($vars) === 1 ? current($vars) : $vars;
+	$json = json_encode($vars, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_LINE_TERMINATORS | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR);
 	error_log($json);
 }
 

@@ -56,7 +56,8 @@ class FileWalker
 		$meter = $this->recognize($newFile);
 		echo $timestamp->format('Y-m-d H:i:s'), ': ', $meter, PHP_EOL;
 		[$_, $lastRedisEntry] = $this->getLastRedisEntry();
-		if ($meter && $meter >= $lastRedisEntry) {
+//		if ($meter && $meter >= $lastRedisEntry) {
+		if ($meter) {
 			$this->updateDay($timestamp, $meter);
 			echo 'Updated', PHP_EOL;
 		} else {
