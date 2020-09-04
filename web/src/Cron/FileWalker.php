@@ -72,8 +72,10 @@ class FileWalker
 	public function getTimestamp($file)
 	{
 		$timestamp = filemtime($file);
-		$utc = new DateTimeZone('UTC');
-		return new DateTime('@' . $timestamp, $utc);
+		$tz = new DateTimeZone('Europe/Berlin');
+		$date = new DateTime('@' . $timestamp);
+		$date->setTimezone($tz);
+		return $date;
 	}
 
 	public function denoise($file)

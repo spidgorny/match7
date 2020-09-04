@@ -15,10 +15,32 @@ class Preview extends Controller
 			$mtime = date('Y-m-d H:i:s', filemtime($file));
 			$title = basename($file) . chr(13) . $mtime;
 			$content[] = '		
-			<a href="../../' . basename($file) . '" title="' . $title . '">
+			<a href="' . self::href([
+					'action' => 'preview',
+					'file' => basename($file),
+				]) . '" title="' . $title . '">
 			<img src="../../' . basename($file) . '" width="255"/>
 			</a>';
 		}
+		return $content;
+	}
+
+	public function previewAction($file)
+	{
+		$content[] = '<img src="../../' . basename($file) . '">';
+		$onlyName = pathinfo($file, PATHINFO_FILENAME);
+		$pngFile = $onlyName . '.png';
+		$content[] = '<img src="../../' . $pngFile . '">';
+
+		$absFile = '/var/motion/' . $file;
+//		$stat = stat($absFile);
+//		$stat = array_reverse($stat);
+		$stat = [
+			'name' => $file,
+			'size' => filesize($absFile),
+			'mtime' => date('Y-m-d H:i:s', filemtime($absFile)),
+		];
+		$content[] = getDebug($stat);
 		return $content;
 	}
 
