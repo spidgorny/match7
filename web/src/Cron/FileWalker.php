@@ -6,7 +6,7 @@ class FileWalker
 	protected $redis;
 	protected $storage = '/var/motion/';
 
-	public function __construct(\Predis\Client $redis)
+	public function __construct(\Predis\Client $redis = null)
 	{
 		$this->redis = $redis;
 	}
@@ -49,8 +49,10 @@ class FileWalker
 
 	public function processFile($file)
 	{
+		echo 'Start: ', $file, PHP_EOL;
 		$timestamp = $this->getTimestamp($file);
 		$newFile = $this->denoise($file);
+		echo 'Denoise: ', $newFile, PHP_EOL;
 		$meter = $this->recognize($newFile);
 		echo $timestamp->format('Y-m-d H:i:s'), ': ', $meter, PHP_EOL;
 		[$_, $lastRedisEntry] = $this->getLastRedisEntry();
@@ -76,9 +78,15 @@ class FileWalker
 
 	public function denoise($file)
 	{
-		// will run the imagemagick
-		// return 'output.png';
-		return $file;
+		$onlyName = pathinfo($file, PATHINFO_FILENAME);
+		$outputFile = '/var/motion/' . $onlyName . '.png';
+		if (is_file($outputFile)) {
+			return $outputFile;
+		}
+		$cmd = 'convert ' . $file . ' -rotate 2 -auto-level -auto-gamma -noise 5 -median 5 -unsharp 5 -normalize ' . $outputFile;
+		$content[] = $cmd;
+		exec($cmd, $output);
+		return $outputFile;
 	}
 
 	/**

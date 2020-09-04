@@ -12,7 +12,7 @@ def detectNumber(img_gray, templateFile):
 	res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
 #	print(np.shape(res), len(res))
 
-	threshold = 0.80
+	threshold = 0.75
 	# print(res)
 	loc = np.where(res >= threshold)
 
